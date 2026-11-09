@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "ModerAI",
+  "version": "0.1.0",
+  "description": "Difumina spoilers, spam y contenido no deseado en tu feed según las reglas que escribes.",
+  "permissions": ["storage"],
+  "host_permissions": ["http://localhost:8000/*"],
+  "background": { "service_worker": "src/background.js" },
+  "action": { "default_title": "ModerAI", "default_popup": "src/popup/popup.html" },
+  "options_page": "src/options/options.html",
+  "content_scripts": [
+    {
+      "matches": ["https://x.com/*", "https://twitter.com/*"],
+      "js": ["src/shared/moderador.js", "src/content/content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

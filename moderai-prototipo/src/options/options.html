@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ModerAI · Configuración</title>
+<link rel="stylesheet" href="../vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+
+<div id="toast" class="toast align-items-center text-white border-0 position-fixed top-0 end-0 m-3" style="z-index:1080;">
+  <div class="d-flex">
+    <div class="toast-body" id="toastBody"></div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+  </div>
+</div>
+
+<div class="container py-4" style="max-width:960px;">
+
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <span class="fw-bold">◐ ModerAI — Dashboard de Opciones</span>
+    <span><a href="../feed/feed.html" class="btn btn-link btn-sm">← Ver feed</a><button id="btnReset" class="btn btn-link btn-sm text-muted text-decoration-underline">Reiniciar demo</button></span>
+  </div>
+
+  <!-- ============ Nav de 4 tabs (wireframe: col 1-3 / 4-6 / 7-9 / 10-12 en desktop) ============ -->
+  <div class="row g-2 mb-3">
+    <div class="col-12 col-md-6 col-lg-3">
+      <button class="btn tab-card w-100" data-tab="topicos">Tópicos</button>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <button class="btn tab-card w-100 active" data-tab="prompts">Prompts (Reglas)</button>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <button class="btn tab-card w-100" data-tab="feedback">Feedback</button>
+    </div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <button class="btn tab-card w-100" data-tab="nip">🔒 NIP Activo</button>
+    </div>
+  </div>
+
+  <!-- ============ Johnson Box — fijo en todos los breakpoints (col 1-12) ============ -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <h6 class="text-uppercase text-muted small fw-bold mb-3">Estado del sistema — Johnson Box</h6>
+      <div class="row text-center text-sm-start g-3">
+        <div class="col-12 col-sm-4">
+          <div class="small text-muted">Reglas activas</div>
+          <div class="fs-4 fw-bold" id="statReglas">0</div>
+        </div>
+        <div class="col-12 col-sm-4">
+          <div class="small text-muted">Bloqueos hoy</div>
+          <div class="fs-4 fw-bold" id="statBloqueos">142</div>
+        </div>
+        <div class="col-12 col-sm-4">
+          <div class="small text-muted">Sensibilidad media</div>
+          <div class="fs-4 fw-bold" id="statSensibilidad">70%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ TAB: Tópicos ============ -->
+  <section class="tab-panel d-none" id="panel-topicos">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Categorías (tópicos) disponibles</h5>
+        <p class="text-muted small">Toda regla se clasifica en una de estas categorías al guardarse desde la pestaña "Prompts (Reglas)".</p>
+        <div class="d-flex flex-wrap gap-2">
+          <span class="badge rounded-pill text-bg-light border">Spoiler</span>
+          <span class="badge rounded-pill text-bg-light border">Spam</span>
+          <span class="badge rounded-pill text-bg-light border">Odio</span>
+          <span class="badge rounded-pill text-bg-light border">Personalizada</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: Prompts (Reglas) — Task Flow 1 ============ -->
+  <section class="tab-panel" id="panel-prompts">
+
+    <!-- Crear nueva regla personalizada (wireframe: col 1-12) -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Crear nueva regla personalizada</h5>
+
+        <form id="formRegla">
+          <div class="row g-3">
+            <!-- textarea: desktop col 1-6 · tablet 1-12 · móvil 1-12 -->
+            <div class="col-12 col-lg-6">
+              <label class="form-label small">Prompt</label>
+              <textarea id="promptTexto" class="form-control" rows="3" placeholder="Ocultar noticias y spoilers de..."></textarea>
+            </div>
+            <!-- select Categoría: desktop 7-9 · tablet 1-6 · móvil 1-12 -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="form-label small">Categoría</label>
+              <select id="categoria" class="form-select">
+                <option value="SPOILER">Spoiler</option>
+                <option value="SPAM">Spam</option>
+                <option value="HATE_SPEECH">Odio</option>
+                <option value="CUSTOM_PROMPT">Personalizada</option>
+              </select>
+            </div>
+            <!-- select Sensibilidad: desktop 10-12 · tablet 7-12 · móvil 1-12 -->
+            <div class="col-12 col-md-6 col-lg-3">
+              <label class="form-label small">Sensibilidad</label>
+              <select id="sensibilidad" class="form-select">
+                <option value="Baja">Baja</option>
+                <option value="Normal" selected>Normal</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="formError" class="text-danger small mt-2 d-none"></div>
+
+          <div class="text-lg-end mt-3">
+            <button type="submit" id="btnGuardar" class="btn btn-dark" disabled>Guardar y activar regla</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Listado de reglas activas (wireframe: filas internas 5/3/2/2 -> 3/2/2/2 -> 1 col) -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Listado de reglas activas</h5>
+
+        <div class="table-responsive d-none d-md-block">
+          <table class="table align-middle mb-0">
+            <thead>
+              <tr class="text-muted small text-uppercase">
+                <th class="col-lg-5 col-md-3">Regla (prompt)</th>
+                <th class="col-lg-3 col-md-2">Categoría</th>
+                <th class="col-lg-2 col-md-2">Sensibilidad</th>
+                <th class="col-lg-2 col-md-2">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="tablaReglasBody"></tbody>
+          </table>
+        </div>
+
+        <!-- versión apilada para móvil (1 columna) -->
+        <div id="listaReglasMobile" class="d-md-none vstack gap-2"></div>
+
+        <p id="reglasVacio" class="text-muted small mb-0">Aún no hay reglas registradas.</p>
+      </div>
+    </div>
+
+    <!-- Vista en vivo de la BD -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h6 class="card-title mb-1">Base de datos — tabla <code>regla_filtro</code></h6>
+        <p class="text-muted small">Se actualiza al instante con cada regla guardada arriba.</p>
+        <div class="table-responsive">
+          <table class="table table-sm font-monospace small mb-0" id="tablaDB">
+            <thead>
+              <tr><th>id_regla</th><th>id_usuario</th><th>prompt</th><th>categoria</th><th>activa</th><th>fecha_creacion</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p id="dbVacio" class="text-muted small mb-0">Tabla vacía.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: Feedback ============ -->
+  <section class="tab-panel d-none" id="panel-feedback">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title mb-2">Feedback / Historial de moderación</h5>
+        <p class="text-muted small mb-0">Corresponde a la entidad <code>historial_moderacion</code>. Se llena cuando el Task Flow 2 (In-Feed) esté activo — fuera del alcance de este prototipo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TAB: NIP Activo ============ -->
+  <section class="tab-panel d-none" id="panel-nip">
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5 class="card-title mb-3">Control parental — NIP</h5>
+        <div class="form-check form-switch mb-3">
+          <input class="form-check-input" type="checkbox" id="nipActivoToggle">
+          <label class="form-check-label small" for="nipActivoToggle">Exigir NIP para guardar reglas</label>
+        </div>
+        <div id="setNipBlock" class="d-none" style="max-width:220px;">
+          <label class="form-label small">Definir NIP de 4 dígitos</label>
+          <input type="password" id="nuevoNip" class="form-control mb-2" maxlength="4" inputmode="numeric" placeholder="••••">
+          <button id="btnGuardarNip" class="btn btn-outline-dark btn-sm">Guardar NIP</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- Modal NIP (rama "SÍ" del Task Flow 1) -->
+<div class="modal fade" id="modalNip" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-body p-4">
+        <h6 class="mb-2">Ingresa tu NIP</h6>
+        <input type="password" id="inputNip" class="form-control mb-2" maxlength="4" inputmode="numeric" placeholder="••••">
+        <p id="nipError" class="text-danger small d-none mb-2"></p>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" id="btnCancelarNip">Cancelar</button>
+          <button class="btn btn-dark btn-sm" id="btnConfirmarNip">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="../shared/storage.js"></script>
+<script src="../shared/posts-demo.js"></script>
+<script src="../shared/api-client.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RedSocial Demo · ModerAI</title>
+<link rel="stylesheet" href="feed.css">
+</head>
+<body>
+  <!-- Barra del navegador simulada: icono de la extensión arriba a la derecha -->
+  <header class="browser">
+    <span class="url">🔒 redsocial-demo.local/inicio</span>
+    <div class="ext">
+      <span title="Extensiones">🧩</span>
+      <button id="extBtn" class="ext-btn" aria-label="Abrir popup de ModerAI" aria-expanded="false">◐<b id="extBadge">0</b></button>
+      <div id="extPop" class="ext-pop" hidden>
+        <iframe id="popFrame" title="Popup de ModerAI" src="../popup/popup.html"></iframe>
+      </div>
+    </div>
+  </header>
+
+  <main class="feed">
+    <div id="estado" class="estado" aria-live="polite">Cargando…</div>
+    <!-- Sin cuenta: solo nombre del usuario y texto -->
+    <form id="composer" class="composer">
+      <input id="cNombre" maxlength="30" placeholder="Nombre del usuario (ej. Ana López)" aria-label="Nombre del usuario" required>
+      <textarea id="cTexto" maxlength="280" rows="3" placeholder="¿Qué quieres publicar?" aria-label="Texto del post" required></textarea>
+      <div class="crow"><span id="cCuenta">0/280</span><button class="b p" type="submit" style="width:auto">Publicar</button></div>
+    </form>
+    <div id="posts"></div>
+  </main>
+
+  <script src="../shared/posts-demo.js"></script>
+  <script src="../shared/storage.js"></script>
+  <script src="../shared/api-client.js"></script>
+  <script src="../shared/moderador.js"></script>
+  <script src="feed.js"></script>
+</body>
+</html>

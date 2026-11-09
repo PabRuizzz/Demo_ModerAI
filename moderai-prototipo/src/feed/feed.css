@@ -1,0 +1,59 @@
+:root{--ink:#1a1a1a;--line:#e2e2e2;--accent:#2255dd;--muted:#767676;}
+*{box-sizing:border-box;}
+body{margin:0;background:#f6f7f9;font-family:-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);}
+.browser{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fff;border-bottom:1px solid var(--line);padding:8px 14px;}
+.url{flex:1;max-width:420px;background:#f1f1f1;border-radius:999px;padding:6px 14px;font-size:12px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ext{position:relative;display:flex;align-items:center;gap:8px;}
+.ext-btn{position:relative;width:34px;height:34px;border-radius:8px;border:1.5px solid var(--ink);background:#fff;font-size:16px;cursor:pointer;}
+.ext-btn b{position:absolute;top:-7px;right:-7px;background:var(--accent);color:#fff;font-size:10px;border-radius:999px;min-width:17px;padding:1px 4px;}
+.ext-btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+.ext-pop{position:absolute;top:44px;right:0;width:282px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18);}
+.ext-pop iframe{display:block;width:100%;height:380px;border:0;border-radius:10px;}
+.feed{max-width:580px;margin:18px auto;padding:0 12px;}
+.estado{font-size:12.5px;color:#444;background:#fff;border:1px dashed var(--ink);border-radius:8px;padding:8px 12px;margin-bottom:14px;line-height:1.45;}
+.estado.err{border-color:#c0392b;color:#c0392b;}
+.post{background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.head{display:flex;gap:10px;align-items:center;padding:10px 14px;}
+.avatar{width:36px;height:36px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:600;}
+.name{font-weight:600;font-size:14px;}
+.meta{font-size:12px;color:var(--muted);font-weight:400;}
+.body{position:relative;min-height:70px;border-top:1px solid var(--line);}
+.content{padding:14px;font-size:14.5px;line-height:1.5;transition:filter .25s;}
+.content.blur{filter:blur(10px);user-select:none;pointer-events:none;}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;padding:8px;}
+.card{background:#fff;border:1.5px solid var(--ink);border-radius:8px;padding:10px 14px;max-width:270px;width:100%;text-align:center;box-shadow:3px 3px 0 var(--ink);}
+.card h3{font-size:13.5px;margin:4px 0 2px;}
+.card p{font-size:11.5px;color:var(--muted);margin:0 0 8px;}
+.badge{display:inline-block;font-size:12px;font-weight:600;background:var(--ink);color:#fff;padding:2px 9px;border-radius:999px;}
+.badge::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#ff8a4c;margin-right:5px;}
+button.b{font:inherit;font-size:12.5px;padding:6px 12px;border-radius:6px;cursor:pointer;border:1.5px solid var(--ink);background:#fff;color:var(--ink);}
+button.b.p{background:var(--ink);color:#fff;width:100%;}
+button.b.d{border-style:dashed;}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 14px;border-top:1px dashed var(--ink);font-size:12px;color:var(--muted);}
+.ia{padding:5px 14px;border-top:1px solid var(--line);font:11px ui-monospace,Consolas,monospace;color:var(--muted);}
+.ia.si{color:#b03a00;}
+.ext-pop[hidden]{display:none;}
+.ext-pop{z-index:30;}
+.composer{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px;}
+.composer input,.composer textarea{width:100%;font:inherit;font-size:14px;border:1.5px solid var(--ink);border-radius:6px;padding:7px 9px;margin-bottom:8px;resize:vertical;}
+.crow{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted);}
+.ia{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+button.b.s{padding:2px 8px;font-size:11px;flex-shrink:0;}
+
+/* Cartel adaptable: el post siempre reserva espacio para el cartel y este se compacta según el ancho del post */
+.body{container-type:inline-size;}
+.body.oculto{min-height:180px;}
+.overlay{overflow:auto;}
+.ia{flex-wrap:wrap;}
+@container (max-width:340px){
+  .body.oculto{min-height:150px;}
+  .card{padding:8px 10px;}
+  .card h3{font-size:12.5px;margin:3px 0 1px;}
+  .card p{font-size:11px;margin:0 0 6px;}
+  .badge{font-size:11px;padding:2px 7px;}
+  button.b.p{padding:5px 8px;font-size:12px;}
+}
+@container (max-width:230px){
+  .card p{display:none;}
+  .body.oculto{min-height:120px;}
+}

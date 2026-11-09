@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ModerAI</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup">
+    <header class="popup-head"><span class="logo">◐ ModerAI</span></header>
+
+    <section class="resumen">
+      <div class="stat"><b id="reglasActivas">0</b><span>reglas activas</span></div>
+      <div class="stat"><b id="bloqueosHoy">0</b><span>bloqueos hoy</span></div>
+    </section>
+
+    <section class="sens">
+      <div class="row-label"><label for="nivel">Sensibilidad (umbral de certeza)</label><b id="nivelVal">70%</b></div>
+      <input type="range" id="nivel" min="20" max="95" step="1" value="70">
+      <p class="hint">Se difuminan los posts con esa certeza del modelo o más.</p>
+    </section>
+
+    <section class="reglas-rapidas">
+      <div class="row-label"><span>Reglas activas</span></div>
+      <ul id="listaReglasRapida" class="lista-mini">
+        <li class="vacio">Aún no has creado reglas.</li>
+      </ul>
+    </section>
+
+    <!-- Task Flow 1, paso 2: (U) Clic "Gestionar Reglas" -> (S) Abre Options -->
+    <button id="btnGestionarReglas" class="btn primary">Gestionar reglas</button>
+  </div>
+
+  <script src="../shared/storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
