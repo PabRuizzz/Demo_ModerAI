@@ -1,0 +1,23 @@
+# Entornos virtuales y dependencias instaladas localmente
+.venv/
+venv/
+.test-venv/
+.test-deps/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Secretos y credenciales
+.env
+.env.*
+*.pem
+*.key
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
