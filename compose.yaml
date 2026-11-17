@@ -1,0 +1,50 @@
+name: moderai-local
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: moderai
+      MYSQL_USER: moderai
+      MYSQL_PASSWORD: ${DB_PASSWORD:?Ejecuta Iniciar-Local.ps1 para crear .env}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?Ejecuta Iniciar-Local.ps1 para crear .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./moderai-prototipo/db/schema.sql:/docker-entrypoint-initdb.d/001-schema.sql:ro
+      - ./moderai-prototipo/db/002_identidad_extension.sql:/docker-entrypoint-initdb.d/002-identidad.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "MYSQL_PWD=$$MYSQL_PASSWORD mysql -h 127.0.0.1 -u moderai moderai -e 'SELECT 1 FROM identidad_extension LIMIT 1'"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 30s
+    restart: unless-stopped
+  api:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      DB_HOST: db
+      DB_USER: moderai
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: moderai
+      DB_SSL_MODE: disabled
+      MODERAI_MODELO: embeddings
+      MODERAI_DEVICE: cpu
+      HF_HOME: /models
+    volumes:
+      - model_cache:/models
+      - ./moderai-prototipo/api:/app/api:ro
+      - ./moderai-prototipo/src:/app/src:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/salud/db', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 80
+      start_period: 60s
+    restart: unless-stopped
+volumes:
+  mysql_data:
+  model_cache:

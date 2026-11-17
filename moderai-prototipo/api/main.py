@@ -64,7 +64,7 @@ M, CACHE, LOCK = {}, {}, threading.Lock()
 async def lifespan(app):
     if MODELO == "embeddings":
         from sentence_transformers import SentenceTransformer
-        M["m"] = M["emb"] = SentenceTransformer(MODELO_EMB)
+        M["m"] = M["emb"] = SentenceTransformer(MODELO_EMB, device=os.getenv("MODERAI_DEVICE", "cpu"))
     elif MODELO == "zeroshot":
         from transformers import pipeline
         M["m"] = pipeline("zero-shot-classification", model=MODELO_ZS)

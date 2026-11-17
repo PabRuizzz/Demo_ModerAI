@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pem
+*.key
+models/
+data/
+.test-deps/
+.test-venv/
