@@ -1,12 +1,16 @@
 param(
     [ValidatePattern('^[a-zA-Z0-9.-]+$')]
-    [string]$VmAddress = '172.195.104.192',
+    [string]$VmAddress = $env:MODERAI_VM_IP,
     [ValidatePattern('^[a-zA-Z0-9_-]+$')]
-    [string]$VmUser = 'azureuser',
-    [string]$KeyPath = (Join-Path $env:USERPROFILE 'Downloads\moderai-vm-key.pem')
+    [string]$VmUser = $(if ($env:MODERAI_VM_USER) { $env:MODERAI_VM_USER } else { 'azureuser' }),
+    [string]$KeyPath = $(if ($env:MODERAI_VM_KEY) { $env:MODERAI_VM_KEY } else { Join-Path $env:USERPROFILE 'Downloads\moderai-vm-key.pem' })
 )
 
 $ErrorActionPreference = 'Stop'
+# La IP de la VM no se guarda en el repo: pasala con -VmAddress o define $env:MODERAI_VM_IP.
+if (-not $VmAddress -or $VmAddress -notmatch '^[a-zA-Z0-9.-]+$') {
+    throw 'Falta la IP de la VM. Usa: .\Iniciar-ModerAI.ps1 -VmAddress <IP>  o  $env:MODERAI_VM_IP = "<IP>"'
+}
 if (-not (Test-Path -LiteralPath $KeyPath -PathType Leaf)) {
     throw "No se encontro la clave SSH: $KeyPath"
 }
